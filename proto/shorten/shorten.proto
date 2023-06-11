@@ -15,7 +15,7 @@ service Shorten {
     }
     rpc FetchOriginalLink(FetchOriginalLinkRequest) returns (FetchOriginalLinkResponse) {
         option (google.api.http) = {
-            get: "/get"
+            get: "/get/{short_link}"
         };
     }
 }

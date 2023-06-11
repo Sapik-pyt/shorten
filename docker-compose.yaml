@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  shorten_db:
+    container_name: shorten_db
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+      - IN_MEMORY=false
+    ports:
+      - "8080:8080"
+      - "8088:8088"
+    restart: unless-stopped
+    depends_on:
+      - db
+  shorten_inmemory:
+    container_name: shorten_inmemory
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+        - IN_MEMORY=true
+    ports:
+      - "8080:8080"
+      - "8088:8088"
+    restart: unless-stopped
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+    ports:
+      - "5432:5432"

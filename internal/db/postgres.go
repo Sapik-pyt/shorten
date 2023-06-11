@@ -4,14 +4,18 @@ import (
 	"context"
 	"fmt"
 
+	_ "github.com/Sapik-pyt/shorten/internal/db/migrations"
+	"github.com/Sapik-pyt/shorten/internal/logging"
 	"github.com/jackc/pgx/v4/pgxpool"
+	_ "github.com/lib/pq"
 	"github.com/pressly/goose/v3"
 )
 
-// Создания pool с postgres
+// Создание connection pool
 func ConnectToDb(ctx context.Context) (*pgxpool.Pool, error) {
-	connStr := newConnectionString()
+	logging.Logger.Info("connecting to db")
 
+	connStr := newConnectionString()
 	pool, err := pgxpool.Connect(ctx, connStr)
 	if err != nil {
 		return nil, err
@@ -31,7 +35,7 @@ func newConnectionString() string {
 		"postgres",
 		"postgres",
 		"123",
-		"localhost",
+		"db",
 		"5432",
 		"postgres",
 		"5")
@@ -39,15 +43,17 @@ func newConnectionString() string {
 	return str
 }
 
-// Обновление миграций 
+// Мигрирование БД
 func migrate(connStr string) error {
-	db, err := goose.OpenDBWithDriver("pgx", connStr)
+	logging.Logger.Info("migration db")
+
+	db, err := goose.OpenDBWithDriver("postgres", connStr)
 	if err != nil {
-		return fmt.Errorf("goose: failed to open DB: %v\n", err)
+		return fmt.Errorf("goose: failed to open DB: %s", err.Error())
 	}
 	defer db.Close()
 
-	if err := goose.Up(db, "./migrations"); err != nil {
+	if err := goose.Up(db, "./internal/db/migrations"); err != nil {
 		return err
 	}
 

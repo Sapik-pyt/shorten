@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/pressly/goose/v3"
+	
 )
 
 func init() {
@@ -17,7 +18,7 @@ func upStart(tx *sql.Tx) error {
 		id bigserial PRIMARY KEY,
 		short_link varchar(10),
 		original_link varchar,
-		created_at timestamp,
+		created_at timestamp
 	);`
 	_, err := tx.Exec(query)
 	if err != nil {

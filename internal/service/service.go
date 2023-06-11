@@ -12,6 +12,7 @@ type Repository interface {
 	CheckExistance(ctx context.Context, shortLink string) (bool, error)
 }
 
+// Структура сервиса
 type ShortenService struct {
 	gen.UnimplementedShortenServer
 	repository Repository

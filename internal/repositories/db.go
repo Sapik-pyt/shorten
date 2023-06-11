@@ -10,26 +10,21 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
+// Стркутура хранилища на основе БД
 type dbStorage struct {
 	pool *pgxpool.Pool
 }
 
-// Создание БД
+// Функция создания хранилища на основе БД
 func NewDbStorage(pool *pgxpool.Pool) *dbStorage {
 	return &dbStorage{
 		pool: pool,
 	}
 }
 
-type linkData struct {
-	ID           int
-	ShortLink    string
-	OriginalLink string
-	CreatedAt    time.Time
-}
-
-// Метод для получения оригинальной строки
+// Метод для получения оригинальной ссылки из БД
 func (db *dbStorage) Get(ctx context.Context, shortLink string) (*string, error) {
+
 	query := `SELECT original_link FROM links WHERE short_link=$1`
 	links := linkData{}
 
@@ -44,7 +39,7 @@ func (db *dbStorage) Get(ctx context.Context, shortLink string) (*string, error)
 	return &links.OriginalLink, nil
 }
 
-// Метод для вставки данных в БД
+// Метод для сохранения данных в БД
 func (db *dbStorage) Save(ctx context.Context, shortLink, originaLink string) error {
 	query := `INSERT INTO links(short_link, original_link, created_at) VALUES($1, $2, $3)`
 	links := linkData{
@@ -59,7 +54,7 @@ func (db *dbStorage) Save(ctx context.Context, shortLink, originaLink string) er
 	return nil
 }
 
-// Метод сканирования 
+// Метод для проверки существования ссылки в БД
 func (db *dbStorage) CheckExistance(ctx context.Context, shortLink string) (bool, error) {
 	query := `SELECT original_link FROM links WHERE short_link=$1`
 	links := linkData{}
@@ -74,4 +69,12 @@ func (db *dbStorage) CheckExistance(ctx context.Context, shortLink string) (bool
 	}
 	return true, nil
 
+}
+
+// Структура для считывания данных из БД
+type linkData struct {
+	ID           int
+	ShortLink    string
+	OriginalLink string
+	CreatedAt    time.Time
 }
