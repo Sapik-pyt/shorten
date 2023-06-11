@@ -13,8 +13,8 @@
 ## Пример создания сокращения ссылки
 ```
 curl --location --request POST 'http://localhost:8080/post' \
->  --header 'Content-Type: application/json' \ 
- --data->     --data-raw '{"original_link": "https://www.youtube.com/"}'
+ --header 'Content-Type: application/json' \
+    --data-raw '{"original_link": "https://www.youtube.com/"}'
  ```
 
 Ответ:
