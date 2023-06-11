@@ -8,15 +8,14 @@
 Реализован обработчик `gRpc`.
 Протестировал слои бизнес-логики и хэндлеров с помощью `testify` и `gomock`.
 
-## Структура проекта 
-
 ## Пример использования сервиса
 
 ## Пример создания сокращения ссылки
-
-`curl --location --request POST 'http://localhost:8080/post' \
+```
+curl --location --request POST 'http://localhost:8080/post' \
 >  --header 'Content-Type: application/json' \ 
- --data->     --data-raw '{"original_link": "https://www.youtube.com/"}'`
+ --data->     --data-raw '{"original_link": "https://www.youtube.com/"}'
+ ```
 
 Ответ:
 
@@ -30,8 +29,10 @@ Content-Type: application/json
 
 ## Пример получения оригинальной ссылки
 
-`curl --location --request GET 'http://localhost:8080/get/fkkG0hxOP6' \
->  --header 'Content-Type: application/json'`
+```
+curl --location --request GET 'http://localhost:8080/get/fkkG0hxOP6' \
+>  --header 'Content-Type: application/json'
+```
 
 ```json
 {
