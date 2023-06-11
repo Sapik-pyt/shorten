@@ -31,7 +31,7 @@ Content-Type: application/json
 
 ```
 curl --location --request GET 'http://localhost:8080/get/fkkG0hxOP6' \
->  --header 'Content-Type: application/json'
+ --header 'Content-Type: application/json'
 ```
 
 ```json
