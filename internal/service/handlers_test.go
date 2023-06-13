@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	_ "github.com/Sapik-pyt/shorten/internal/logging"
 )
 
 func TestCreateShortLink_Positive(t *testing.T) {
@@ -39,14 +40,17 @@ func TestCreateShortLink_Positive(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			controller := gomock.NewController(t)
 			defer controller.Finish()
+			
 			repoMock := mock.NewMockRepository(controller)
 			srv := NewShortenService(repoMock)
 
 			tt.prepare(repoMock)
 			response, err := srv.CreateShortLink(ctx, tt.request)
+
 			assert.NoError(t, err, "unexpected error")
 
 			assert.Equal(t, tt.want, response, "not equal")
+			
 		})
 	}
 }
