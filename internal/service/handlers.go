@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 
-	"github.com/Sapik-pyt/shorten/internal/logging"
 	"github.com/Sapik-pyt/shorten/internal/shorten"
 	gen "github.com/Sapik-pyt/shorten/proto/gen"
 	"google.golang.org/grpc/codes"
@@ -17,7 +16,6 @@ func (s *ShortenService) CreateShortLink(ctx context.Context, req *gen.CreateSho
 	}
 
 	shortLink := shorten.HashString(req.OriginalLink)
-
 	ok, err := s.repository.CheckExistance(ctx, shortLink)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "checking existance: %s", err.Error())
@@ -31,7 +29,6 @@ func (s *ShortenService) CreateShortLink(ctx context.Context, req *gen.CreateSho
 		return nil, status.Errorf(codes.Internal, "saving short link: %s", err.Error())
 	}
 
-	logging.Logger.Info("create short link")
 	return &gen.CreateShortLinkResponse{
 		ShortLink: shortLink,
 	}, nil
@@ -49,7 +46,7 @@ func (s *ShortenService) FetchOriginalLink(ctx context.Context, req *gen.FetchOr
 	if originalLink == nil {
 		return nil, status.Error(codes.NotFound, "original link not found")
 	}
-	logging.Logger.Info("get oringinal link")
+
 	return &gen.FetchOriginalLinkResponse{
 		OriginalLink: *originalLink,
 	}, nil
